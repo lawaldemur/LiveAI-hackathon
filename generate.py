@@ -103,6 +103,7 @@ def request_structure_edit(image_path, edit_prompt):
     control_strength = 0.8  #@param {type:"slider", min:0, max:1, step:0.05}
     seed = 0 #@param {type:"integer"}
     output_format = "png" #@param ["webp", "jpeg", "png"]
+    style_preset = "photographic"
 
     host = f"https://api.stability.ai/v2beta/stable-image/control/structure"
 
@@ -113,6 +114,7 @@ def request_structure_edit(image_path, edit_prompt):
         "output_format": output_format,
         "prompt" : prompt,
         "negative_prompt" : negative_prompt,
+        # "style_preset": style_preset,
     }
 
     response = send_generation_request(

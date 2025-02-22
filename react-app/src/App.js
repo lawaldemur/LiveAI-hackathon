@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sparkle from "react-sparkle";
+import Slider from "@mui/material/Slider";
+
 import "./App.css";
 
 const API_SOURCE_URL = "http://127.0.0.1:3001";
@@ -131,32 +133,34 @@ function App() {
                             alt="Art Style"
                         />
                     </div>
-                    <div
-                        className="range-input-wrapper"
-                        style={{ textAlign: "center", margin: "20px 0" }}
-                    >
-                        <input
-                            type="range"
-                            min="0"
-                            max={storedStyles.length - 1}
-                            step="0.01"
-                            value={activeIndex}
-                            onChange={(event) => {
-                                const index = parseFloat(event.target.value);
-                                const roundedIndex = Math.round(index);
-                                setImage(storedImages[roundedIndex]);
-                                setActiveIndex(roundedIndex);
-                            }}
-                            style={{ width: "80%" }}
-                        />
-                        <div
-                            style={{
-                                marginTop: "10px",
-                                fontSize: "1.2em",
-                                color: "#333",
-                            }}
-                        >
-                            {storedStyles[Math.round(activeIndex)]}
+                    <div className="breadcrumbs-wrapper">
+                        <div className="breadcrumbs">
+                            {storedStyles.map((style, index) => (
+                                <span
+                                    className="breadcrumb_wrapper"
+                                    key={index}
+                                >
+                                    {index > 0 && (
+                                        <span className="breadcrumb-separator">
+                                            {" "}
+                                            →{" "}
+                                        </span>
+                                    )}
+                                    <span
+                                        className={`breadcrumb ${
+                                            index === activeIndex
+                                                ? "active"
+                                                : ""
+                                        }`}
+                                        onClick={() => {
+                                            setImage(storedImages[index]);
+                                            setActiveIndex(index);
+                                        }}
+                                    >
+                                        {style}
+                                    </span>
+                                </span>
+                            ))}
                         </div>
                     </div>
                     <div className="personality-selector-wrapper">
