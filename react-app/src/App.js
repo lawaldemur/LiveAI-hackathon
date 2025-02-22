@@ -21,9 +21,38 @@ function App() {
         "Warm",
     ];
 
+    const pickCore = async (style) => {
+        console.log("http://127.0.0.1:3001/images/styles.png");
+        setImage("http://127.0.0.1:3001/images/styles.png");
+    };
+
     const fetchImage = async (style) => {
         try {
-            setImage("./styles.png");
+            try {
+                const response = await fetch(
+                    "http://127.0.0.1:3001/edit_image",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            style: style,
+                            image_name: "styles.png",
+                        }),
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const data = await response.json();
+                console.log(data.new_image_path);
+                setImage("http://127.0.0.1:3001/images/" + data.new_image_path);
+            } catch (error) {
+                console.error("Error fetching image:", error);
+            }
         } catch (error) {
             console.error("Error fetching image:", error);
         }
@@ -40,10 +69,7 @@ function App() {
                     <div className="style-selector-wrapper">
                         <ul>
                             {artStyles.map((style) => (
-                                <li
-                                    key={style}
-                                    onClick={() => fetchImage(style)}
-                                >
+                                <li key={style} onClick={() => pickCore(style)}>
                                     {style}
                                 </li>
                             ))}
@@ -55,7 +81,7 @@ function App() {
             {image && (
                 <>
                     <div className="style-image-wrapper">
-                        <img src="./styles.png" alt="Art Style" />
+                        <img src={image} alt="Art Style" />
                     </div>
                     <div className="personality-selector-wrapper">
                         <ul style={{ columns: 2 }}>

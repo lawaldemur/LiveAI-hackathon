@@ -33,7 +33,8 @@ def edit_image():
     try:
         new_edited_image_path = request_structure_edit(image_path, style)
         new_removed_background_image_path = request_background_removal(new_edited_image_path)
-        return jsonify({"new_image_path": new_removed_background_image_path}), 200
+        filename = os.path.basename(new_removed_background_image_path)
+        return jsonify({"new_image_path": filename}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

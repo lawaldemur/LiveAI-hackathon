@@ -152,7 +152,7 @@ def request_background_removal(image_path):
 
     if response.ok:
         filename, _ = os.path.splitext(os.path.basename(image_path))
-        output_image_path = f"./images/r_removed_bg_{filename}.webp"
+        output_image_path = f"./images/r_removed_bg_{filename}.png"
         with open(output_image_path, 'wb') as file:
             file.write(response.content)
         print(f"Saved image {output_image_path}")
