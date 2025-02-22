@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Sparkle from "react-sparkle";
-import Slider from "@mui/material/Slider";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import IosShareIcon from "@mui/icons-material/IosShare";
 
 import "./App.css";
 
@@ -14,6 +16,7 @@ function App() {
     const [activeIndex, setActiveIndex] = useState(-1);
     const [loading, setLoading] = useState(false);
     const [activeGif, setActiveGif] = useState(1);
+    const [sharing, setSharing] = useState(false);
 
     const artStyles = [
         "Surrealism",
@@ -42,6 +45,13 @@ function App() {
         }
         if (!storedImages.includes(image)) {
             setStoredImages(["styles.png"]);
+        }
+    };
+
+    const scrollBreadcrumbsToEnd = () => {
+        const breadcrumbsElement = document.querySelector(".breadcrumbs");
+        if (breadcrumbsElement) {
+            breadcrumbsElement.scrollLeft = breadcrumbsElement.scrollWidth;
         }
     };
 
@@ -77,6 +87,7 @@ function App() {
             ];
             setStoredImages(newImages);
             setActiveIndex(newImages.length - 1);
+            scrollBreadcrumbsToEnd();
         } catch (error) {
             console.error("Error fetching image:", error);
         } finally {
@@ -107,6 +118,22 @@ function App() {
 
     return (
         <div className="App">
+            {image && (
+                <>
+                    <button
+                        className="back-home-button"
+                        onClick={() => setImage(null)}
+                    >
+                        <ArrowBackIosNewIcon className="icon" />
+                    </button>
+                    <button
+                        className="share-button"
+                        onClick={() => setSharing(true)}
+                    >
+                        <IosShareIcon className="icon" />
+                    </button>
+                </>
+            )}
             {!image && (
                 <>
                     <header className="App-header">
@@ -143,7 +170,7 @@ function App() {
                                     {index > 0 && (
                                         <span className="breadcrumb-separator">
                                             {" "}
-                                            →{" "}
+                                            <ArrowForwardIosIcon />{" "}
                                         </span>
                                     )}
                                     <span
