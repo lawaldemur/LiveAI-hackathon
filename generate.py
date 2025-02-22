@@ -138,6 +138,30 @@ def request_structure_edit(image_path, edit_prompt):
     return edited
 
 
+def request_background_removal(image_path):
+    host = "https://api.stability.ai/v2beta/stable-image/edit/remove-background"
+    params = {
+        "image": image_path,
+        "output_format": "png"
+    }
+
+    response = send_generation_request(
+        host,
+        params
+    )
+
+    if response.ok:
+        filename, _ = os.path.splitext(os.path.basename(image_path))
+        output_image_path = f"./images/r_removed_bg_{filename}.webp"
+        with open(output_image_path, 'wb') as file:
+            file.write(response.content)
+        print(f"Saved image {output_image_path}")
+        return output_image_path
+    else:
+        raise Exception(f"HTTP {response.status_code}: {response.text}")
+
+
+
 def encode_image(image_path):
   with open(image_path, "rb") as image_file:
     return base64.b64encode(image_file.read()).decode('utf-8')

@@ -113,10 +113,8 @@ html {
 }
 
 .personality-selector-wrapper {
-    margin-top: 70px;
-    padding: 20px; /* Add some padding for aesthetics */
-    display: flex;
-    justify-content: center; /* Center items horizontally */
+    margin-top: 20px;
+    padding: 20px 20px 0; /* Add some padding for aesthetics */
 }
 
 .personality-selector-wrapper ul {
@@ -128,9 +126,9 @@ html {
 }
 
 .personality-selector-wrapper li {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     cursor: pointer; /* Pointer cursor on hover */
-    padding: 15px 15px; /* Padding for button-like appearance */
+    padding: 15px 20px; /* Padding for button-like appearance */
     background-color: #ffffff; /* White background for list items */
     border: 1px solid #d3d3d3; /* Light grey border */
     border-radius: 40px; /* Rounded corners */
@@ -152,4 +150,30 @@ html {
     background-color: #e0e0e0; /* Maintain hover style on click */
     transform: translateY(-2px); /* Maintain lift effect on click */
     user-select: none;
+}
+
+.personality-input-wrapper {
+    display: flex;
+    justify-content: center; /* Center the input field horizontally */
+    padding: 0 20px 20px;
+}
+
+.personality-input-wrapper input {
+    width: 100%;
+    padding: 15px; /* Padding for button-like appearance */
+    background-color: #ffffff; /* White background for input */
+    border: 1px solid #d3d3d3; /* Light grey border */
+    border-radius: 40px; /* Rounded corners */
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+    text-align: center; /* Center text inside the input */
+    font-family: "Helvetica Neue", Arial, sans-serif; /* Clean and elegant sans-serif font */
+    font-size: 1rem;
+    font-weight: 300; /* Light weight for a clean look */
+    outline: none; /* Remove default outline */
+}
+
+.personality-input-wrapper input:focus {
+    background-color: #f0f0f0; /* Slightly lighter grey on focus */
+    transform: translateY(-2px); /* Lift effect on focus */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhance shadow on focus */
 }

@@ -12,6 +12,14 @@ function App() {
         "Futurism",
         "Conceptual Art",
     ];
+    const personalityStyles = [
+        "Adventerous",
+        "Elegant",
+        "Luxurious",
+        "Modern",
+        "Cozy",
+        "Warm",
+    ];
 
     const fetchImage = async (style) => {
         try {
@@ -51,7 +59,7 @@ function App() {
                     </div>
                     <div className="personality-selector-wrapper">
                         <ul style={{ columns: 2 }}>
-                            {artStyles.map((style) => (
+                            {personalityStyles.map((style) => (
                                 <li
                                     key={style}
                                     onClick={() => fetchImage(style)}
@@ -60,6 +68,12 @@ function App() {
                                 </li>
                             ))}
                         </ul>
+                    </div>
+                    <div className="personality-input-wrapper">
+                        <input
+                            type="text"
+                            placeholder="Your personal wish..."
+                        />
                     </div>
                 </>
             )}
