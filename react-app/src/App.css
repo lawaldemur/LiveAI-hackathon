@@ -1,5 +1,7 @@
 html {
     font-size: 17px;
+    height: 100vh;
+    overflow-y: hidden;
 }
 
 .App {
@@ -29,7 +31,6 @@ html {
 
 .style-selector-wrapper {
     padding: 20px; /* Add some padding for aesthetics */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: center; /* Center items horizontally */
 }
@@ -72,11 +73,83 @@ html {
     align-items: flex-end; /* Align image to the bottom */
     background-color: #ffffff; /* White background for image container */
     padding: 20px; /* Add some padding */
+    height: 60vh;
 }
 
 .style-image-wrapper img {
     max-width: 100%;
     max-height: 100%;
     border-radius: 10px; /* Rounded corners for images */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for images */
+}
+
+.transition-left {
+    animation: slideLeft 0.5s forwards;
+}
+
+.transition-right {
+    animation: slideRight 0.5s forwards;
+}
+
+@keyframes slideLeft {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideRight {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.personality-selector-wrapper {
+    margin-top: 70px;
+    padding: 20px; /* Add some padding for aesthetics */
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+}
+
+.personality-selector-wrapper ul {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+
+    display: block;
+}
+
+.personality-selector-wrapper li {
+    margin-bottom: 10px;
+    cursor: pointer; /* Pointer cursor on hover */
+    padding: 15px 15px; /* Padding for button-like appearance */
+    background-color: #ffffff; /* White background for list items */
+    border: 1px solid #d3d3d3; /* Light grey border */
+    border-radius: 40px; /* Rounded corners */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+    text-align: center; /* Center text inside the button */
+    font-family: "Helvetica Neue", Arial, sans-serif; /* Clean and elegant sans-serif font */
+    font-weight: 300; /* Light weight for a clean look */
+    user-select: none; /* Prevent text selection on click */
+    width: 80%; /* Ensure consistent width for alignment */
+}
+
+.personality-selector-wrapper li:hover {
+    background-color: #e0e0e0; /* Slightly darker grey on hover */
+    transform: translateY(-2px); /* Lift effect on hover */
+    user-select: none; /* Prevent text selection on click */
+}
+
+.personality-selector-wrapper li:active {
+    background-color: #e0e0e0; /* Maintain hover style on click */
+    transform: translateY(-2px); /* Maintain lift effect on click */
+    user-select: none;
 }

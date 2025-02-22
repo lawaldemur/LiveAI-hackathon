@@ -15,9 +15,7 @@ function App() {
 
     const fetchImage = async (style) => {
         try {
-            const response = await fetch(`/api/getImage?style=${style}`);
-            const data = await response.json();
-            setImage(data.imageUrl);
+            setImage("./styles.png");
         } catch (error) {
             console.error("Error fetching image:", error);
         }
@@ -25,23 +23,46 @@ function App() {
 
     return (
         <div className="App">
-            <header className="App-header">
-                <h3>Pick the Core Aesthetic</h3>
-            </header>
+            {!image && (
+                <>
+                    <header className="App-header">
+                        <h3>Pick the Core Aesthetic</h3>
+                    </header>
 
-            <div className="style-selector-wrapper">
-                <ul>
-                    {artStyles.map((style) => (
-                        <li key={style} onClick={() => fetchImage(style)}>
-                            {style}
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                    <div className="style-selector-wrapper">
+                        <ul>
+                            {artStyles.map((style) => (
+                                <li
+                                    key={style}
+                                    onClick={() => fetchImage(style)}
+                                >
+                                    {style}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </>
+            )}
 
-            <div className="style-image-wrapper">
-                {image && <img src={image} alt="Art Style" />}
-            </div>
+            {image && (
+                <>
+                    <div className="style-image-wrapper">
+                        <img src="./styles.png" alt="Art Style" />
+                    </div>
+                    <div className="personality-selector-wrapper">
+                        <ul style={{ columns: 2 }}>
+                            {artStyles.map((style) => (
+                                <li
+                                    key={style}
+                                    onClick={() => fetchImage(style)}
+                                >
+                                    {style}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </>
+            )}
         </div>
     );
 }
