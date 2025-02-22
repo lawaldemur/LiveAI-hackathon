@@ -4,10 +4,10 @@ from urllib.parse import quote, unquote
 import os
 from werkzeug.utils import secure_filename
 
-from generate import request_structure_edit, request_background_removal
+from generate import request_structure_edit, request_background_removal, get_difference_between_images
 
 app = Flask(__name__, static_folder='images')
-CORS(app, origins=["http://localhost:3000"])
+CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000"])
 
 UPLOAD_FOLDER = "./images"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -37,6 +37,32 @@ def edit_image():
         return jsonify({"new_image_path": filename}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route('/try_on', methods=['POST'])
+def try_on():
+    if "upload_image" not in request.files:
+        return jsonify({"error": "No image file provided"}), 400
+
+    file = request.files["upload_image"]
+
+    if file.filename == "":
+        return jsonify({"error": "No selected file"}), 400
+
+    filename = secure_filename(file.filename)
+    file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    file.save(file_path)
+    
+    style_image = request.form["style_image"]
+
+    # get text description of difference
+    difference = get_difference_between_images(file_path, "./images/" + style_image)
+    
+    # edit image according to the analysed difference
+    new_edited_image_path = request_structure_edit(file_path, difference)
+    new_removed_background_image_path = request_background_removal(new_edited_image_path)
+    filename = os.path.basename(new_removed_background_image_path)
+    
+    return jsonify({"new_image_path": filename}), 200
 
 
 if __name__ == '__main__':

@@ -16,7 +16,7 @@ function App() {
     const [activeIndex, setActiveIndex] = useState(-1);
     const [loading, setLoading] = useState(false);
     const [activeGif, setActiveGif] = useState(1);
-    const [sharing, setSharing] = useState(false);
+    const [sharingImage, setSharingImage] = useState(null);
 
     const artStyles = [
         "Surrealism",
@@ -95,6 +95,41 @@ function App() {
         }
     };
 
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        // TODO: unsupported dimensions - must be at most 4,194,304 pixels
+        if (file) {
+            console.log("File selected:", file.name);
+
+            const formData = new FormData();
+            formData.append("upload_image", file);
+            formData.append("style_image", sharingImage);
+
+            setLoading(true);
+            try {
+                const response = await fetch(API_SOURCE_URL + "/try_on", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        Accept: "application/json",
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const data = await response.json();
+                setSharingImage(data.new_image_path);
+                setLoading(false);
+            } catch (error) {
+                console.log("Error uploading image:", error);
+            }
+        } else {
+            console.log("No files selected");
+        }
+    };
+
     useEffect(() => {
         if (loading) {
             const gifDurations = [
@@ -118,6 +153,39 @@ function App() {
 
     return (
         <div className="App">
+            {sharingImage && (
+                <div className="sharing-wrapper">
+                    <button
+                        className="back-home-button"
+                        onClick={() => setSharingImage(null)}
+                    >
+                        <ArrowBackIosNewIcon className="icon" />
+                    </button>
+                    <div className="style-image-wrapper">
+                        <img
+                            src={API_SOURCE_URL + "/images/" + sharingImage}
+                            alt="Art Style"
+                        />
+                    </div>
+                    <div className="sharing-buttons">
+                        <button className="sharing-x-btn">Share on X</button>
+                        <button
+                            className="sharing-try-on-btn"
+                            onClick={() =>
+                                document.getElementById("fileInput").click()
+                            }
+                        >
+                            Try it on
+                        </button>
+                        <input
+                            type="file"
+                            id="fileInput"
+                            style={{ display: "none" }}
+                            onChange={handleFileChange}
+                        />
+                    </div>
+                </div>
+            )}
             {image && (
                 <>
                     <button
@@ -128,7 +196,7 @@ function App() {
                     </button>
                     <button
                         className="share-button"
-                        onClick={() => setSharing(true)}
+                        onClick={() => setSharingImage(image)}
                     >
                         <IosShareIcon className="icon" />
                     </button>

@@ -170,25 +170,15 @@ def encode_image(image_path):
     return base64.b64encode(image_file.read()).decode('utf-8')
 
 
-def get_difference_between_images(image1, image2, ignore=[], object_edit=True):
+def get_difference_between_images(image1, image2):
     PROMPT = """
     Reference Image (the first image): This is the current outfit that I want to enhance. Keep the structure of this outfit unchanged, using it as a starting point.
 
     Inspiration Image (the second image): This could be any item that conveys a style, mood, or aesthetic quality. This image is not necessarily from the same type of outfit as the reference image but should serve as a creative influence or thematic guide.
 
-    Task: Using the inspiration image to inform your decision, make a single change to the reference image that best elevates or enhances its aesthetic. This change can be a color adjustment, a furniture upgrade, a lighting choice, or any other design element."""
-
-    if object_edit:
-        PROMPT += """
-Please provide an object to search for and a what do you want to see instead of this according to the style difference, showcasing the chosen single change that best improves the outfit’s overall aesthetic while preserving its original structure. I'll edit design of the chosen search object in the first reference image according to the suggested prompt based on the second inspiration image."""
-    else:
-        PROMPT += """Provide new design style for the outfit based on the inspiration image which will be applied to the reference image. Be as short as one sentence."""
-
-    if ignore:
-        PROMPT += f"\nDon't suggested to edit the following or similar items: {', '.join(ignore)}."
-        print(f"Ignoring: {', '.join(ignore)}")
-
-    #  You don’t need to replicate an item from the inspiration image directly; instead, focus on capturing the essence or vibe and apply it in a subtle, high-level manner.
+    Task: Using the inspiration image to inform your decision, make a single change to the reference image that best elevates or enhances its aesthetic. This change can be a color adjustment, a furniture upgrade, a lighting choice, or any other design element.
+    
+    Provide new design style for the outfit based on the inspiration image which will be applied to the reference image"""
 
     base64_image1 = encode_image(image1)
     base64_image2 = encode_image(image2)
@@ -217,27 +207,16 @@ Please provide an object to search for and a what do you want to see instead of 
         }
     ]
 
-    print("difference processing")
+    print("Two images difference analysis...")
 
-    if object_edit:
-        response = client.beta.chat.completions.parse(
-            model="gpt-4o",
-            messages=messages,
-            response_format=ObjectEditing if object_edit else None,
-        )
-        edit_object = response.choices[0].message.parsed
+    response = client.beta.chat.completions.parse(
+        model="gpt-4o",
+        messages=messages,
+    )
+    edit_object = response.choices[0].message.content
 
-        print(f"{edit_object.search_object}: {edit_object.edit_prompt}")
-        return edit_object
-    else:
-        response = client.beta.chat.completions.parse(
-            model="gpt-4o",
-            messages=messages,
-        )
-        edit_object = response.choices[0].message.content
-
-        print(f"{edit_object}")
-        return edit_object
+    print(f"{edit_object}")
+    return edit_object
     
 
 
