@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sparkle from "react-sparkle";
 import "./App.css";
 
@@ -11,6 +11,7 @@ function App() {
     const [storedImages, setStoredImages] = useState([]);
     const [activeIndex, setActiveIndex] = useState(-1);
     const [loading, setLoading] = useState(false);
+    const [activeGif, setActiveGif] = useState(1);
 
     const artStyles = [
         "Surrealism",
@@ -43,7 +44,7 @@ function App() {
     };
 
     const fetchImage = async (style) => {
-        setLoading(true); // Set loading to true when starting the fetch
+        setLoading(true);
         const newStyles = [...storedStyles.slice(0, activeIndex + 1), style];
         setStoredStyles(newStyles);
         console.log("Requested style: ", newStyles.join(", "));
@@ -77,9 +78,30 @@ function App() {
         } catch (error) {
             console.error("Error fetching image:", error);
         } finally {
-            setLoading(false); // Set loading to false after fetch completes
+            setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (loading) {
+            const gifDurations = [
+                { file: "loading5.gif", duration: 1700 },
+                { file: "loading4.gif", duration: 1760 },
+                { file: "loading3.gif", duration: 3750 },
+                { file: "loading2.gif", duration: 5040 },
+                { file: "loading1.gif", duration: 7200 },
+            ];
+            const currentGif = `loading${activeGif}.gif`;
+            const gifInfo = gifDurations.find((gif) => gif.file === currentGif);
+            const duration = gifInfo ? gifInfo.duration : 2000;
+
+            const timeoutId = setTimeout(() => {
+                setActiveGif((prev) => (prev % 5) + 1);
+            }, duration);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [loading, activeGif]);
 
     return (
         <div className="App">
@@ -109,21 +131,33 @@ function App() {
                             alt="Art Style"
                         />
                     </div>
-                    <div className="breadcrumbs">
-                        <ul>
-                            {storedStyles.map((style, index) => (
-                                <li
-                                    key={index}
-                                    onClick={() => {
-                                        setImage(storedImages[index]);
-                                        setActiveIndex(index);
-                                    }}
-                                >
-                                    {style}
-                                    {index < storedStyles.length - 1 && " --- "}
-                                </li>
-                            ))}
-                        </ul>
+                    <div
+                        className="range-input-wrapper"
+                        style={{ textAlign: "center", margin: "20px 0" }}
+                    >
+                        <input
+                            type="range"
+                            min="0"
+                            max={storedStyles.length - 1}
+                            step="0.01"
+                            value={activeIndex}
+                            onChange={(event) => {
+                                const index = parseFloat(event.target.value);
+                                const roundedIndex = Math.round(index);
+                                setImage(storedImages[roundedIndex]);
+                                setActiveIndex(roundedIndex);
+                            }}
+                            style={{ width: "80%" }}
+                        />
+                        <div
+                            style={{
+                                marginTop: "10px",
+                                fontSize: "1.2em",
+                                color: "#333",
+                            }}
+                        >
+                            {storedStyles[Math.round(activeIndex)]}
+                        </div>
                     </div>
                     <div className="personality-selector-wrapper">
                         <ul style={{ columns: 2 }}>
@@ -145,7 +179,7 @@ function App() {
                                 if (event.key === "Enter") {
                                     fetchImage(event.target.value);
                                     event.target.value = "";
-                                    event.target.blur(); // Remove focus from the input
+                                    event.target.blur();
                                 }
                             }}
                         />
@@ -158,7 +192,10 @@ function App() {
                             >
                                 <Sparkle count={200} />
                             </div>
-                            <img src="./wand.gif" alt="Loading" />
+                            <img
+                                src={`./loading/loading${activeGif}.gif`}
+                                alt="Loading"
+                            />
                         </div>
                     )}
                 </>
