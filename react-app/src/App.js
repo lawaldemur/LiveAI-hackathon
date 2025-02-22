@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./App.css";
 
+const API_SOURCE_URL = "http://127.0.0.1:3001";
+
 function App() {
     const [image, setImage] = useState(null);
 
@@ -22,26 +24,22 @@ function App() {
     ];
 
     const pickCore = async (style) => {
-        console.log("http://127.0.0.1:3001/images/styles.png");
-        setImage("http://127.0.0.1:3001/images/styles.png");
+        setImage("styles.png");
     };
 
     const fetchImage = async (style) => {
         try {
             try {
-                const response = await fetch(
-                    "http://127.0.0.1:3001/edit_image",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            style: style,
-                            image_name: "styles.png",
-                        }),
-                    }
-                );
+                const response = await fetch(API_SOURCE_URL + "/edit_image", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        style: style,
+                        image_name: "styles.png",
+                    }),
+                });
 
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
@@ -49,7 +47,7 @@ function App() {
 
                 const data = await response.json();
                 console.log(data.new_image_path);
-                setImage("http://127.0.0.1:3001/images/" + data.new_image_path);
+                setImage(data.new_image_path);
             } catch (error) {
                 console.error("Error fetching image:", error);
             }
@@ -81,7 +79,10 @@ function App() {
             {image && (
                 <>
                     <div className="style-image-wrapper">
-                        <img src={image} alt="Art Style" />
+                        <img
+                            src={API_SOURCE_URL + "/images/" + image}
+                            alt="Art Style"
+                        />
                     </div>
                     <div className="personality-selector-wrapper">
                         <ul style={{ columns: 2 }}>

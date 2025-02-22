@@ -47,6 +47,7 @@ def send_generation_request(
         data=params
     )
     if not response.ok:
+        print(f"Error: HTTP {response.status_code}: {response.text}")
         raise Exception(f"HTTP {response.status_code}: {response.text}")
 
     return response
@@ -101,7 +102,7 @@ def request_structure_edit(image_path, edit_prompt):
     negative_prompt = "" #@param {type:"string"}
     control_strength = 0.8  #@param {type:"slider", min:0, max:1, step:0.05}
     seed = 0 #@param {type:"integer"}
-    output_format = "jpeg" #@param ["webp", "jpeg", "png"]
+    output_format = "png" #@param ["webp", "jpeg", "png"]
 
     host = f"https://api.stability.ai/v2beta/stable-image/control/structure"
 
