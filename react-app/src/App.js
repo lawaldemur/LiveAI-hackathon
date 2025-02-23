@@ -9,7 +9,7 @@ import "./App.css";
 const API_SOURCE_URL = "http://127.0.0.1:3001";
 const CORE_IMAGE = "styles.png";
 const X_SHARE_CONTENT =
-    "Here's what I've created using Brando fashion branding tool. Try it yourself!";
+    "Here's what I've created using Brando! It's a fashion branding tool. Try it yourself!";
 
 function App() {
     const [image, setImage] = useState(null);
