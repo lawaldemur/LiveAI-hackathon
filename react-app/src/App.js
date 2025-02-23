@@ -7,7 +7,6 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 import "./App.css";
 
 const API_SOURCE_URL = "http://127.0.0.1:3001";
-const CORE_IMAGE = "styles.png";
 const X_SHARE_CONTENT =
     "Here's what I've created using Brando! It's a fashion branding tool. Try it yourself!";
 
@@ -116,15 +115,16 @@ function App() {
     }, [storedStyles, activeIndex]);
 
     const pickCore = async (style) => {
-        setCoreImage(CORE_IMAGE);
-        setImage(CORE_IMAGE);
+        let core_image = style.toLowerCase() + ".png";
+        setCoreImage(core_image);
+        setImage(core_image);
         setActiveIndex(0);
 
         if (!storedStyles.includes(style)) {
             setStoredStyles([style]);
         }
         if (!storedImages.includes(image)) {
-            setStoredImages([CORE_IMAGE]);
+            setStoredImages([core_image]);
         }
     };
 
@@ -463,18 +463,6 @@ function App() {
                                         alt="X"
                                     />
                                 </a>
-                                {data.imgLink && (
-                                    <div className="image-wrapper">
-                                        <img
-                                            src={data.imgLink}
-                                            alt={`${data.company} style`}
-                                            className="style-image"
-                                            onError={(e) => {
-                                                e.target.style.display = "none";
-                                            }}
-                                        />
-                                    </div>
-                                )}
                             </div>
                         ))}
                     </div>
