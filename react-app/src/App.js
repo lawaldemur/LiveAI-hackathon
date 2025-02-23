@@ -8,6 +8,8 @@ import "./App.css";
 
 const API_SOURCE_URL = "http://127.0.0.1:3001";
 const CORE_IMAGE = "styles.png";
+const X_SHARE_CONTENT =
+    "Here's what I've created using Brando fashion branding tool. Try it yourself!";
 
 function App() {
     const [image, setImage] = useState(null);
@@ -229,6 +231,14 @@ function App() {
         }
     }, [loading, activeGif]);
 
+    useEffect(() => {
+        if (loading || sharing) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+    }, [loading, sharing]);
+
     return (
         <div className="App">
             <div className="contentApp">
@@ -264,9 +274,21 @@ function App() {
                             />
                         </div>
                         <div className="sharing-buttons">
-                            <button className="sharing-x-btn">
-                                Share on X
-                            </button>
+                            <a
+                                class="twitter-share-button"
+                                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                                    X_SHARE_CONTENT
+                                )}`}
+                                data-size="large"
+                                target="_blank"
+                            >
+                                Share on{" "}
+                                <img
+                                    className="x-icon"
+                                    src="./x_white.png"
+                                    alt="X"
+                                />
+                            </a>
                         </div>
                     </div>
                 )}

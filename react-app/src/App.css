@@ -406,6 +406,23 @@ html {
     width: 19px;
     height: 19px;
     position: relative;
-    top: 3px;
-    left: 3px;
+    top: 4px;
+    left: 4px;
+}
+
+.twitter-share-button {
+    margin: 40px 0;
+    display: inline-block;
+    background-color: #333; /* Greyish color */
+    color: #fff; /* White text color */
+    padding: 10px 20px 15px; /* Padding for button-like appearance */
+    border-radius: 5px; /* Rounded corners */
+    font-family: "Helvetica Neue", Arial, sans-serif; /* Consistent font */
+    font-weight: bold; /* Bold text for emphasis */
+    text-decoration: none; /* Remove underline */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.twitter-share-button:hover {
+    background-color: #111; /* Slightly darker greyish shade on hover */
 }
