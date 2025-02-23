@@ -1,9 +1,16 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from urllib.parse import quote, unquote
-import os
 from werkzeug.utils import secure_filename
-from generate import request_structure_edit, request_background_removal, describe_image_style, suggest_style_edits, research_companies_by_style
+from functools import lru_cache
+import os
+
+from generate import (
+    request_structure_edit,
+    request_background_removal,
+    describe_image_style,
+    suggest_style_edits,
+    research_companies_by_style,
+)
 
 
 app = Flask(__name__, static_folder='images')
@@ -31,12 +38,17 @@ def edit_image():
     image_path = os.path.join(app.config["UPLOAD_FOLDER"], image_name)
 
     try:
-        new_edited_image_path = request_structure_edit(image_path, style)
-        new_removed_background_image_path = request_background_removal(new_edited_image_path)
-        filename = os.path.basename(new_removed_background_image_path)
+        filename = get_cached_image_path(image_path, style)
         return jsonify({"new_image_path": filename}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@lru_cache(maxsize=128)
+def get_cached_image_path(image_path, style):
+    new_edited_image_path = request_structure_edit(image_path, style)
+    new_removed_background_image_path = request_background_removal(new_edited_image_path)
+    filename = os.path.basename(new_removed_background_image_path)
+    return filename
     
 @app.route('/try_on', methods=['POST'])
 def try_on():
@@ -78,11 +90,15 @@ def style_suggestions():
         return jsonify({"error": "Missing 'style'"}), 400
 
     try:
-        suggestions = suggest_style_edits(style)
+        suggestions = get_cached_style_suggestions(style)
         return jsonify({"suggestions": suggestions}), 200
     except Exception as e:
         print(e)
         return jsonify({"error": str(e)}), 500
+
+@lru_cache(maxsize=128)
+def get_cached_style_suggestions(style):
+    return suggest_style_edits(style)
 
 @app.route('/research_style', methods=['POST'])
 def research_style():
@@ -93,11 +109,15 @@ def research_style():
         return jsonify({"error": "Missing 'style'"}), 400
 
     try:
-        results = research_companies_by_style(style)
+        results = get_cached_research_results(style)
         return jsonify({"results": results}), 200
     except Exception as e:
         print(e)
         return jsonify({"error": str(e)}), 500
+
+@lru_cache(maxsize=128)
+def get_cached_research_results(style):
+    return research_companies_by_style(style)
 
 
 if __name__ == '__main__':

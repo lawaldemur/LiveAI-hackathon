@@ -50,7 +50,9 @@ function App() {
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ style: style.join(", ") }),
+                        body: JSON.stringify({
+                            style: style.slice(0, activeIndex + 1).join(", "),
+                        }),
                     }
                 );
 
@@ -66,7 +68,7 @@ function App() {
             }
         };
 
-        if (storedStyles.length > 1) {
+        if (storedStyles.slice(0, activeIndex + 1).length > 1) {
             updatePersonalityStyles(storedStyles);
         } else {
             setPersonalityStyles([
@@ -78,7 +80,7 @@ function App() {
                 "Warm",
             ]);
         }
-    }, [storedStyles]);
+    }, [storedStyles, image]);
 
     useEffect(() => {
         const updateResearchData = async (style) => {
@@ -90,7 +92,9 @@ function App() {
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ style: style.join(", ") }),
+                        body: JSON.stringify({
+                            style: style.slice(0, activeIndex + 1).join(", "),
+                        }),
                     }
                 );
 
