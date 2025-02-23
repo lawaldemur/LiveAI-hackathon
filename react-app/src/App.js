@@ -6,7 +6,7 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 
 import "./App.css";
 
-const API_SOURCE_URL = "http://127.0.0.1:3001";
+const API_SOURCE_URL = process.env.REACT_APP_BACKEND_URL;
 const X_SHARE_CONTENT =
     "Here's what I've created using Brando! It's a fashion branding tool. Try it yourself!";
 

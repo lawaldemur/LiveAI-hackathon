@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from functools import lru_cache
+from dotenv import load_dotenv
 import os
 
 from generate import (
@@ -14,7 +15,9 @@ from generate import (
 
 
 app = Flask(__name__, static_folder='images')
-CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000"])
+
+load_dotenv()
+CORS(app, origins=[os.getenv("FRONTEND_URL"), os.getenv("SERVER_URL")])
 
 UPLOAD_FOLDER = "./images"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
