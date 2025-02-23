@@ -279,7 +279,7 @@ function App() {
                         </div>
                         <div className="sharing-buttons">
                             <a
-                                class="twitter-share-button"
+                                className="twitter-share-button"
                                 href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
                                     X_SHARE_CONTENT
                                 )}`}
