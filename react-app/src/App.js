@@ -196,7 +196,17 @@ function App() {
                 <>
                     <button
                         className="back-home-button"
-                        onClick={() => setImage(null)}
+                        onClick={() => {
+                            setImage(null);
+                            setCoreImage(null);
+                            setStoredStyles([]);
+                            setStoredImages([]);
+                            setActiveIndex(-1);
+                            setLoading(false);
+                            setActiveGif(1);
+                            setSharing(false);
+                            setSharingImage(null);
+                        }}
                     >
                         <ArrowBackIosNewIcon className="icon" />
                     </button>
