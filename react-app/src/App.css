@@ -1,5 +1,7 @@
 html {
     font-size: 17px;
+    height: 100vh;
+    overflow-y: hidden;
 }
 
 .App {
@@ -367,9 +369,15 @@ html {
 
 .contentApp {
     height: 100vh;
+    overflow-y: hidden;
     display: flex;
     flex-direction: column;
 }
 .researchApp {
-    height: 100vh;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #999;
+    z-index: 5;
 }

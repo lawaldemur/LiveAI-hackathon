@@ -19,6 +19,7 @@ function App() {
     const [activeGif, setActiveGif] = useState(1);
     const [sharing, setSharing] = useState(false);
     const [sharingImage, setSharingImage] = useState(null);
+    const [researchData, setResearchData] = useState([]);
 
     const artStyles = [
         "Surrealism",
@@ -374,31 +375,30 @@ function App() {
             </div>
 
             <div className="researchApp">
-                <div className="researchBlock">
-                    <h3>Company</h3>
-                    <p>Description of the clothing company.</p>
+                <div className="research-data-toggle">
+                    <div className="research-toggle"></div>
                 </div>
-                <div className="researchBlock">
-                    <h3>Style Description</h3>
-                    <p>
-                        Describe the visual appearance of this fashion design
-                        style, focusing on clothing pieces of this
-                        brand/company.
-                    </p>
-                </div>
-                <div className="researchBlock">
-                    <h3>Link</h3>
-                    <a href="#">
-                        Link to any source related to this fashion style, ensure
-                        it's available.
-                    </a>
-                </div>
-                <div className="researchBlock">
-                    <h3>X Link</h3>
-                    <a href="#">
-                        Link to X (e.g., Twitter) search, account, or discussion
-                        related to this fashion style.
-                    </a>
+                <div className="research-data-wrapper">
+                    {researchData.map((data, index) => (
+                        <div key={index} className="research-data-item">
+                            <h3>{data.company}</h3>
+                            <p>{data.styleDescription}</p>
+                            <a
+                                href={data.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                More about this style
+                            </a>
+                            <a
+                                href={data.xLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Related discussions on X
+                            </a>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
