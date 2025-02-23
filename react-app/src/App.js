@@ -7,6 +7,7 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 import "./App.css";
 
 const API_SOURCE_URL = "http://127.0.0.1:3001";
+const CORE_IMAGE = "styles.png";
 
 function App() {
     const [image, setImage] = useState(null);
@@ -21,7 +22,7 @@ function App() {
 
     const artStyles = [
         "Surrealism",
-        "Minimalism",
+        "Gothic",
         "Postmodernism",
         "Expressionism",
         "Futurism",
@@ -77,15 +78,15 @@ function App() {
     }, [storedStyles]);
 
     const pickCore = async (style) => {
-        setCoreImage("styles.png");
-        setImage("styles.png");
+        setCoreImage(CORE_IMAGE);
+        setImage(CORE_IMAGE);
         setActiveIndex(0);
 
         if (!storedStyles.includes(style)) {
             setStoredStyles([style]);
         }
         if (!storedImages.includes(image)) {
-            setStoredImages(["styles.png"]);
+            setStoredImages([CORE_IMAGE]);
         }
     };
 
