@@ -80,7 +80,7 @@ function App() {
                 "Warm",
             ]);
         }
-    }, [storedStyles, image]);
+    }, [storedStyles, activeIndex]);
 
     useEffect(() => {
         const updateResearchData = async (style) => {
@@ -113,7 +113,7 @@ function App() {
         if (storedStyles.length > 0) {
             updateResearchData(storedStyles);
         }
-    }, [storedStyles]);
+    }, [storedStyles, activeIndex]);
 
     const pickCore = async (style) => {
         setCoreImage(CORE_IMAGE);
