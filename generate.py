@@ -353,7 +353,7 @@ def suggest_style_edits(style):
     return recommendations
 
 
-class StyleResearch(BaseModel):
+class CompanyResearch(BaseModel):
     styleName: str = Field(description="The fashion style referred naming (DON'T PUT `Gucci's Latest Trend` or similar, but name the concept)")
     company: str = Field(description="The clothing company")
     styleDescription: str = Field(description="Describe the visual appearance of this fashion design style, focus on clothing pieces")
@@ -372,38 +372,45 @@ def company_trend_research(company):
                 "content": f"Describe the latest fashion design trend incorporated by {company}."
             },
         ],
-        response_format=StyleResearch
+        response_format=CompanyResearch
     )
 
     for choice in completion.choices:
         print(choice.message.parsed)
 
 
-class TrendResearch(BaseModel):
-    company: str = Field(description="The clothing company")
+class StyleResearch(BaseModel):
+    company: str = Field(description="The clothing company or brand")
     styleDescription: str = Field(description="Describe the visual appearance of this fashion design style, focus on clothing pieces of this brand/company")
-    link: str = Field(description="Link to any source related to this fashion style, ensure it's available")
+    link: str = Field(description="Link to their website or some official distributor, ensure it's available")
     xLink: str = Field(description="Link to X (ex. Twitter) search, account, or discussion related to this fashion style")
+    imgLink: str = Field(description="Link to some work of this company illustrating work in this style")
 
-def research_companies_by_trend(trend):
+def research_companies_by_style(style):
     completion = grok_client.beta.chat.completions.parse(
         model="grok-2-1212",
         messages=[
             {
                 "role": "system",
-                "content": "You are an assitant helping with researching the latest fashion design trends on X (ex. Twitter).  (DON'T PUT `Latest Trend` or similar, but name the company/brend)"
+                "content": "You are an assistant helping with researching the latest fashion design trends on X (ex. Twitter).  (DON'T PUT `Latest Trend` or similar, but name the company/brand)"
             },
             {
                 "role": "user",
-                "content": f"Provide fasion design companies which incorporated fasion design style similar to: {trend}."
+                "content": f"Provide fashion design companies which incorporated fashion design style similar to: {style}."
             },
         ],
-        response_format=TrendResearch
+        response_format=StyleResearch
     )
 
+    results = []
     for choice in completion.choices:
-        print(choice.message.parsed)
-
-
-if __name__ == "__main__":
-    research_companies_by_trend("Futurism, Science, Eco-friendly")
+        parsed_message = choice.message.parsed
+        result = {
+            "company": parsed_message.company,
+            "styleDescription": parsed_message.styleDescription,
+            "link": parsed_message.link,
+            "xLink": parsed_message.xLink,
+            "imgLink": parsed_message.imgLink
+        }
+        results.append(result)
+    return results

@@ -1,7 +1,7 @@
 html {
     font-size: 17px;
     height: 100vh;
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
 }
 
 .App {
@@ -369,15 +369,43 @@ html {
 
 .contentApp {
     height: 100vh;
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
     display: flex;
     flex-direction: column;
 }
 .researchApp {
-    position: fixed;
+    /* position: fixed;
     left: 0;
-    bottom: 0;
+    bottom: 0; */
     width: 100%;
-    background-color: #999;
+    background-color: #fff;
     z-index: 5;
+}
+.research-data-wrapper {
+    margin: 25px 0;
+    border-top: 1px solid #eee;
+    padding: 20px 20px 50px 20px;
+}
+.research-data-item > * {
+    display: block;
+}
+.research-data-wrapper a {
+    color: #333; /* Dark text color */
+    font-family: "Helvetica Neue", Arial, sans-serif; /* Nice font */
+    font-weight: bold; /* Normal font weight for readability */
+    margin: 20px 0; /* Margin for spacing */
+    text-decoration: none; /* Remove underline */
+    transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.research-data-wrapper a:hover {
+    color: #111; /* Darker text color on hover */
+}
+
+.x-icon {
+    width: 19px;
+    height: 19px;
+    position: relative;
+    top: 3px;
+    left: 3px;
 }

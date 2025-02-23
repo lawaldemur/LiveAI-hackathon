@@ -78,6 +78,37 @@ function App() {
         }
     }, [storedStyles]);
 
+    useEffect(() => {
+        const updateResearchData = async (style) => {
+            try {
+                const response = await fetch(
+                    API_SOURCE_URL + "/research_style",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ style: style.join(", ") }),
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const data = await response.json();
+                setResearchData(data.results);
+                console.log("Research data:", data.results);
+            } catch (error) {
+                console.error("Error updating research data:", error);
+            }
+        };
+
+        if (storedStyles.length > 0) {
+            updateResearchData(storedStyles);
+        }
+    }, [storedStyles]);
+
     const pickCore = async (style) => {
         setCoreImage(CORE_IMAGE);
         setImage(CORE_IMAGE);
@@ -100,8 +131,10 @@ function App() {
 
     const fetchImage = async (style) => {
         setLoading(true);
+        setResearchData([]);
         const newStyles = [...storedStyles.slice(0, activeIndex + 1), style];
         setStoredStyles(newStyles);
+        scrollBreadcrumbsToEnd();
         console.log("Requested style: ", newStyles.join(", "));
 
         try {
@@ -374,33 +407,52 @@ function App() {
                 )}
             </div>
 
-            <div className="researchApp">
-                <div className="research-data-toggle">
-                    <div className="research-toggle"></div>
+            {researchData && !loading && researchData.length > 0 && (
+                <div className="researchApp">
+                    <div className="research-data-wrapper">
+                        {researchData.map((data, index) => (
+                            <div key={index} className="research-data-item">
+                                <h3>
+                                    <a
+                                        href={data.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {data.company}
+                                    </a>
+                                </h3>
+                                <p>{data.styleDescription}</p>
+                                <a
+                                    href={`https://x.com/search?q=${encodeURIComponent(
+                                        data.company + " Brand"
+                                    )}&src=typed_query`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Related discussions on{" "}
+                                    <img
+                                        className="x-icon"
+                                        src="./x.png"
+                                        alt="X"
+                                    />
+                                </a>
+                                {data.imgLink && (
+                                    <div className="image-wrapper">
+                                        <img
+                                            src={data.imgLink}
+                                            alt={`${data.company} style`}
+                                            className="style-image"
+                                            onError={(e) => {
+                                                e.target.style.display = "none";
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <div className="research-data-wrapper">
-                    {researchData.map((data, index) => (
-                        <div key={index} className="research-data-item">
-                            <h3>{data.company}</h3>
-                            <p>{data.styleDescription}</p>
-                            <a
-                                href={data.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                More about this style
-                            </a>
-                            <a
-                                href={data.xLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Related discussions on X
-                            </a>
-                        </div>
-                    ))}
-                </div>
-            </div>
+            )}
         </div>
     );
 }
