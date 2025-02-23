@@ -64,6 +64,15 @@ function App() {
 
         if (storedStyles.length > 1) {
             updatePersonalityStyles(storedStyles);
+        } else {
+            setPersonalityStyles([
+                "Adventerous",
+                "Elegant",
+                "Luxurious",
+                "Modern",
+                "Cozy",
+                "Warm",
+            ]);
         }
     }, [storedStyles]);
 
@@ -218,9 +227,9 @@ function App() {
                             alt="Art Style"
                         />
                     </div>
-                    <div className="sharing-buttons">
+                    {/* <div className="sharing-buttons">
                         <button className="sharing-x-btn">Share on X</button>
-                    </div>
+                    </div> */}
                 </div>
             )}
             {image && (

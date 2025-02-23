@@ -219,7 +219,7 @@ def get_difference_between_images(image1, image2):
 
 
 def describe_image_style(image):
-    PROMPT = """Briefly describe main fashion style features of the image and its colors in 1-2 sentences"""
+    PROMPT = """Briefly describe main fashion style features and colors of the image in 1-2 sentences"""
     base64_image = encode_image(image)
 
     messages = [
