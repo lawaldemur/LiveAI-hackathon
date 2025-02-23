@@ -434,7 +434,7 @@ function App() {
                 )}
             </div>
 
-            {researchData && !loading && researchData.length > 0 && (
+            {researchData && image && !loading && researchData.length > 0 && (
                 <div className="researchApp">
                     <div className="research-data-wrapper">
                         {researchData.map((data, index) => (
