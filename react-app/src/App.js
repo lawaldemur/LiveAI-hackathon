@@ -281,6 +281,7 @@ function App() {
                                 )}`}
                                 data-size="large"
                                 target="_blank"
+                                rel="noopener noreferrer"
                             >
                                 Share on{" "}
                                 <img
