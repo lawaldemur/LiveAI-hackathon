@@ -171,14 +171,15 @@ def encode_image(image_path):
 
 
 def get_difference_between_images(image1, image2):
+    print(image1, image2)
     PROMPT = """
-    Reference Image (the first image): This is the current outfit that I want to enhance. Keep the structure of this outfit unchanged, using it as a starting point.
+    Reference Image (the first image): This is the current outfit that I want to replace.
 
-    Inspiration Image (the second image): This could be any item that conveys a style, mood, or aesthetic quality. This image is not necessarily from the same type of outfit as the reference image but should serve as a creative influence or thematic guide.
+    Inspiration Image (the second image): This image serves as the thematic guide.
 
-    Task: Using the inspiration image to inform your decision, make a single change to the reference image that best elevates or enhances its aesthetic. This change can be a color adjustment, a furniture upgrade, a lighting choice, or any other design element.
+    Task: Using the inspiration image to inform your decision, propose replacements to the reference image that make it match the style of the inspiration image.
     
-    Provide new design style for the outfit based on the inspiration image which will be applied to the reference image"""
+    Provide a single change to adopt the new design style for the reference image. Reply with a concrete style change in 1 sentence"""
 
     base64_image1 = encode_image(image1)
     base64_image2 = encode_image(image2)

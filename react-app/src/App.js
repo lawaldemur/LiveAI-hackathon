@@ -16,6 +16,7 @@ function App() {
     const [activeIndex, setActiveIndex] = useState(-1);
     const [loading, setLoading] = useState(false);
     const [activeGif, setActiveGif] = useState(1);
+    const [sharing, setSharing] = useState(false);
     const [sharingImage, setSharingImage] = useState(null);
 
     const artStyles = [
@@ -80,6 +81,7 @@ function App() {
             const data = await response.json();
             console.log(data.new_image_path);
             setImage(data.new_image_path);
+            setSharingImage(data.new_image_path);
 
             const newImages = [
                 ...storedImages.slice(0, activeIndex + 1),
@@ -103,7 +105,7 @@ function App() {
 
             const formData = new FormData();
             formData.append("upload_image", file);
-            formData.append("style_image", sharingImage);
+            formData.append("style_image", image);
 
             setLoading(true);
             try {
@@ -153,22 +155,15 @@ function App() {
 
     return (
         <div className="App">
-            {sharingImage && (
+            {sharing && (
                 <div className="sharing-wrapper">
                     <button
                         className="back-home-button"
-                        onClick={() => setSharingImage(null)}
+                        onClick={() => setSharing(null)}
                     >
                         <ArrowBackIosNewIcon className="icon" />
                     </button>
-                    <div className="style-image-wrapper">
-                        <img
-                            src={API_SOURCE_URL + "/images/" + sharingImage}
-                            alt="Art Style"
-                        />
-                    </div>
                     <div className="sharing-buttons">
-                        <button className="sharing-x-btn">Share on X</button>
                         <button
                             className="sharing-try-on-btn"
                             onClick={() =>
@@ -181,8 +176,18 @@ function App() {
                             type="file"
                             id="fileInput"
                             style={{ display: "none" }}
+                            onClick={(event) => (event.target.value = null)}
                             onChange={handleFileChange}
                         />
+                    </div>
+                    <div className="style-image-wrapper">
+                        <img
+                            src={API_SOURCE_URL + "/images/" + sharingImage}
+                            alt="Art Style"
+                        />
+                    </div>
+                    <div className="sharing-buttons">
+                        <button className="sharing-x-btn">Share on X</button>
                     </div>
                 </div>
             )}
@@ -196,7 +201,12 @@ function App() {
                     </button>
                     <button
                         className="share-button"
-                        onClick={() => setSharingImage(image)}
+                        onClick={() => {
+                            if (sharingImage === null) {
+                                setSharingImage(image);
+                            }
+                            setSharing(true);
+                        }}
                     >
                         <IosShareIcon className="icon" />
                     </button>

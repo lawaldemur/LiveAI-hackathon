@@ -59,8 +59,7 @@ def try_on():
     
     # edit image according to the analysed difference
     new_edited_image_path = request_structure_edit(file_path, difference)
-    new_removed_background_image_path = request_background_removal(new_edited_image_path)
-    filename = os.path.basename(new_removed_background_image_path)
+    filename = os.path.basename(new_edited_image_path)
     
     return jsonify({"new_image_path": filename}), 200
 
