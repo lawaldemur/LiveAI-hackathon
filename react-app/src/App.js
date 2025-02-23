@@ -197,170 +197,210 @@ function App() {
 
     return (
         <div className="App">
-            {sharing && (
-                <div className="sharing-wrapper">
-                    <button
-                        className="back-home-button"
-                        onClick={() => setSharing(null)}
-                    >
-                        <ArrowBackIosNewIcon className="icon" />
-                    </button>
-                    <div className="sharing-buttons">
+            <div className="contentApp">
+                {sharing && (
+                    <div className="sharing-wrapper">
                         <button
-                            className="sharing-try-on-btn"
-                            onClick={() =>
-                                document.getElementById("fileInput").click()
-                            }
+                            className="back-home-button"
+                            onClick={() => setSharing(null)}
                         >
-                            Try it on
+                            <ArrowBackIosNewIcon className="icon" />
                         </button>
-                        <input
-                            type="file"
-                            id="fileInput"
-                            style={{ display: "none" }}
-                            onClick={(event) => (event.target.value = null)}
-                            onChange={handleFileChange}
-                        />
-                    </div>
-                    <div className="style-image-wrapper">
-                        <img
-                            src={API_SOURCE_URL + "/images/" + sharingImage}
-                            alt="Art Style"
-                        />
-                    </div>
-                    {/* <div className="sharing-buttons">
-                        <button className="sharing-x-btn">Share on X</button>
-                    </div> */}
-                </div>
-            )}
-            {image && (
-                <>
-                    <button
-                        className="back-home-button"
-                        onClick={() => {
-                            setImage(null);
-                            setCoreImage(null);
-                            setStoredStyles([]);
-                            setStoredImages([]);
-                            setActiveIndex(-1);
-                            setLoading(false);
-                            setActiveGif(1);
-                            setSharing(false);
-                            setSharingImage(null);
-                        }}
-                    >
-                        <ArrowBackIosNewIcon className="icon" />
-                    </button>
-                    <button
-                        className="share-button"
-                        onClick={() => {
-                            if (sharingImage === null) {
-                                setSharingImage(image);
-                            }
-                            setSharing(true);
-                        }}
-                    >
-                        <IosShareIcon className="icon" />
-                    </button>
-                </>
-            )}
-            {!image && (
-                <>
-                    <header className="App-header">
-                        <h3>Pick the Core Aesthetic</h3>
-                    </header>
-
-                    <div className="style-selector-wrapper">
-                        <ul>
-                            {artStyles.map((style) => (
-                                <li key={style} onClick={() => pickCore(style)}>
-                                    {style}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </>
-            )}
-
-            {image && (
-                <>
-                    <div className="style-image-wrapper">
-                        <img
-                            src={API_SOURCE_URL + "/images/" + image}
-                            alt="Art Style"
-                        />
-                    </div>
-                    <div className="breadcrumbs-wrapper">
-                        <div className="breadcrumbs">
-                            {storedStyles.map((style, index) => (
-                                <span
-                                    className="breadcrumb_wrapper"
-                                    key={index}
-                                >
-                                    {index > 0 && (
-                                        <span className="breadcrumb-separator">
-                                            {" "}
-                                            <ArrowForwardIosIcon />{" "}
-                                        </span>
-                                    )}
-                                    <span
-                                        className={`breadcrumb ${
-                                            index === activeIndex
-                                                ? "active"
-                                                : ""
-                                        }`}
-                                        onClick={() => {
-                                            setImage(storedImages[index]);
-                                            setActiveIndex(index);
-                                        }}
-                                    >
-                                        {style}
-                                    </span>
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="personality-selector-wrapper">
-                        <ul style={{ columns: 2 }}>
-                            {personalityStyles.map((style) => (
-                                <li
-                                    key={style}
-                                    onClick={() => fetchImage(style)}
-                                >
-                                    {style}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="personality-input-wrapper">
-                        <input
-                            type="text"
-                            placeholder="Your personal wish..."
-                            onKeyDown={(event) => {
-                                if (event.key === "Enter") {
-                                    fetchImage(event.target.value);
-                                    event.target.value = "";
-                                    event.target.blur();
+                        <div className="sharing-buttons">
+                            <button
+                                className="sharing-try-on-btn"
+                                onClick={() =>
+                                    document.getElementById("fileInput").click()
                                 }
-                            }}
-                        />
-                    </div>
-                    {loading && (
-                        <div className={`loading ${loading ? "visible" : ""}`}>
-                            <div
-                                className="sparklingAnimation"
-                                style={{ position: "absolute" }}
                             >
-                                <Sparkle count={200} />
-                            </div>
-                            <img
-                                src={`./loading/loading${activeGif}.gif`}
-                                alt="Loading"
+                                Try it on
+                            </button>
+                            <input
+                                type="file"
+                                id="fileInput"
+                                style={{ display: "none" }}
+                                onClick={(event) => (event.target.value = null)}
+                                onChange={handleFileChange}
                             />
                         </div>
-                    )}
-                </>
-            )}
+                        <div className="style-image-wrapper">
+                            <img
+                                src={API_SOURCE_URL + "/images/" + sharingImage}
+                                alt="Art Style"
+                            />
+                        </div>
+                        <div className="sharing-buttons">
+                            <button className="sharing-x-btn">
+                                Share on X
+                            </button>
+                        </div>
+                    </div>
+                )}
+                {image && (
+                    <>
+                        <button
+                            className="back-home-button"
+                            onClick={() => {
+                                setImage(null);
+                                setCoreImage(null);
+                                setStoredStyles([]);
+                                setStoredImages([]);
+                                setActiveIndex(-1);
+                                setLoading(false);
+                                setActiveGif(1);
+                                setSharing(false);
+                                setSharingImage(null);
+                            }}
+                        >
+                            <ArrowBackIosNewIcon className="icon" />
+                        </button>
+                        <button
+                            className="share-button"
+                            onClick={() => {
+                                if (sharingImage === null) {
+                                    setSharingImage(image);
+                                }
+                                setSharing(true);
+                            }}
+                        >
+                            <IosShareIcon className="icon" />
+                        </button>
+                    </>
+                )}
+                {!image && (
+                    <>
+                        <header className="App-header">
+                            <h3>Pick the Core Aesthetic</h3>
+                        </header>
+
+                        <div className="style-selector-wrapper">
+                            <ul>
+                                {artStyles.map((style) => (
+                                    <li
+                                        key={style}
+                                        onClick={() => pickCore(style)}
+                                    >
+                                        {style}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </>
+                )}
+
+                {image && (
+                    <>
+                        <div className="style-image-wrapper">
+                            <img
+                                src={API_SOURCE_URL + "/images/" + image}
+                                alt="Art Style"
+                            />
+                        </div>
+                        <div className="breadcrumbs-wrapper">
+                            <div className="breadcrumbs">
+                                {storedStyles.map((style, index) => (
+                                    <span
+                                        className="breadcrumb_wrapper"
+                                        key={index}
+                                    >
+                                        {index > 0 && (
+                                            <span className="breadcrumb-separator">
+                                                {" "}
+                                                <ArrowForwardIosIcon />{" "}
+                                            </span>
+                                        )}
+                                        <span
+                                            className={`breadcrumb ${
+                                                index === activeIndex
+                                                    ? "active"
+                                                    : ""
+                                            }`}
+                                            onClick={() => {
+                                                setImage(storedImages[index]);
+                                                setActiveIndex(index);
+                                            }}
+                                        >
+                                            {style}
+                                        </span>
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="personality-selector-wrapper">
+                            <ul style={{ columns: 2 }}>
+                                {personalityStyles.map((style) => (
+                                    <li
+                                        key={style}
+                                        onClick={() => fetchImage(style)}
+                                    >
+                                        {style}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className="personality-input-wrapper">
+                            <input
+                                type="text"
+                                placeholder="Your personal wish..."
+                                onKeyDown={(event) => {
+                                    if (event.key === "Enter") {
+                                        fetchImage(event.target.value);
+                                        event.target.value = "";
+                                        event.target.blur();
+                                    }
+                                }}
+                            />
+                        </div>
+                        {loading && (
+                            <div
+                                className={`loading ${
+                                    loading ? "visible" : ""
+                                }`}
+                            >
+                                <div
+                                    className="sparklingAnimation"
+                                    style={{ position: "absolute" }}
+                                >
+                                    <Sparkle count={200} />
+                                </div>
+                                <img
+                                    src={`./loading/loading${activeGif}.gif`}
+                                    alt="Loading"
+                                />
+                            </div>
+                        )}
+                    </>
+                )}
+            </div>
+
+            <div className="researchApp">
+                <div className="researchBlock">
+                    <h3>Company</h3>
+                    <p>Description of the clothing company.</p>
+                </div>
+                <div className="researchBlock">
+                    <h3>Style Description</h3>
+                    <p>
+                        Describe the visual appearance of this fashion design
+                        style, focusing on clothing pieces of this
+                        brand/company.
+                    </p>
+                </div>
+                <div className="researchBlock">
+                    <h3>Link</h3>
+                    <a href="#">
+                        Link to any source related to this fashion style, ensure
+                        it's available.
+                    </a>
+                </div>
+                <div className="researchBlock">
+                    <h3>X Link</h3>
+                    <a href="#">
+                        Link to X (e.g., Twitter) search, account, or discussion
+                        related to this fashion style.
+                    </a>
+                </div>
+            </div>
         </div>
     );
 }

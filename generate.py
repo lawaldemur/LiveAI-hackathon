@@ -2,7 +2,7 @@ import os
 import base64
 import requests
 from openai import OpenAI
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 
 os.makedirs("images", exist_ok=True)
@@ -11,8 +11,13 @@ load_dotenv()
 STABILITY_KEY = os.getenv("STABILITY_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 PICSART_API_KEY = os.getenv("PICSART_API_KEY")
+XAI_API_KEY = os.getenv("XAI_API_KEY")
 
 client = OpenAI()
+grok_client = OpenAI(
+    api_key=XAI_API_KEY,
+    base_url="https://api.x.ai/v1",
+)
 
 
 def send_generation_request(
@@ -346,3 +351,59 @@ def suggest_style_edits(style):
         completion.choices[0].message.parsed.recommendation6,
     ]
     return recommendations
+
+
+class StyleResearch(BaseModel):
+    styleName: str = Field(description="The fashion style referred naming (DON'T PUT `Gucci's Latest Trend` or similar, but name the concept)")
+    company: str = Field(description="The clothing company")
+    styleDescription: str = Field(description="Describe the visual appearance of this fashion design style, focus on clothing pieces")
+    link: str = Field(description="Link to any source related to this fashion style, ensure it's available")
+
+def company_trend_research(company):
+    completion = grok_client.beta.chat.completions.parse(
+        model="grok-2-1212",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are an assitant helping with researching the latest fashion design trends on X (ex. Twitter).  (DON'T PUT `Gucci's Latest Trend` or similar, but name the concept)"
+            },
+            {
+                "role": "user",
+                "content": f"Describe the latest fashion design trend incorporated by {company}."
+            },
+        ],
+        response_format=StyleResearch
+    )
+
+    for choice in completion.choices:
+        print(choice.message.parsed)
+
+
+class TrendResearch(BaseModel):
+    company: str = Field(description="The clothing company")
+    styleDescription: str = Field(description="Describe the visual appearance of this fashion design style, focus on clothing pieces of this brand/company")
+    link: str = Field(description="Link to any source related to this fashion style, ensure it's available")
+    xLink: str = Field(description="Link to X (ex. Twitter) search, account, or discussion related to this fashion style")
+
+def research_companies_by_trend(trend):
+    completion = grok_client.beta.chat.completions.parse(
+        model="grok-2-1212",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are an assitant helping with researching the latest fashion design trends on X (ex. Twitter).  (DON'T PUT `Latest Trend` or similar, but name the company/brend)"
+            },
+            {
+                "role": "user",
+                "content": f"Provide fasion design companies which incorporated fasion design style similar to: {trend}."
+            },
+        ],
+        response_format=TrendResearch
+    )
+
+    for choice in completion.choices:
+        print(choice.message.parsed)
+
+
+if __name__ == "__main__":
+    research_companies_by_trend("Futurism, Science, Eco-friendly")

@@ -1,13 +1,8 @@
 html {
     font-size: 17px;
-    height: 100vh;
-    overflow-y: hidden;
 }
 
 .App {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
     background-color: #ffffff; /* Light grey background for the app */
     color: #333; /* Dark text for contrast */
     font-family: "Helvetica Neue", Arial, sans-serif; /* Clean and elegant sans-serif font */
@@ -368,4 +363,13 @@ html {
 .sharing-x-btn:hover,
 .sharing-try-on-btn:hover {
     background-color: #111; /* Darker background color on hover */
+}
+
+.contentApp {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.researchApp {
+    height: 100vh;
 }
