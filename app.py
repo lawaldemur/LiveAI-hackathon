@@ -3,7 +3,7 @@ from flask_cors import CORS
 from urllib.parse import quote, unquote
 import os
 from werkzeug.utils import secure_filename
-from generate import request_structure_edit, request_background_removal
+from generate import request_structure_edit, request_background_removal, describe_image_style
 
 
 app = Flask(__name__, static_folder='images')
@@ -52,7 +52,9 @@ def try_on():
     file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
     file.save(file_path)
     
-    # style_image = request.form["style_image"]
+    style_image = request.form["style_image"]
+    style_description = describe_image_style("./images/" + style_image)
+
     style = request.form["style"]
 
     # get text description of difference
@@ -61,7 +63,7 @@ def try_on():
     # edit image according to the analysed difference
     # new_edited_image_path = request_structure_edit(file_path, difference)
 
-    new_edited_image_path = request_structure_edit(file_path, style)
+    new_edited_image_path = request_structure_edit(file_path, f"MAIN STYLE: {style}. FEATURES: {style_description}")
     new_removed_background_image_path = request_background_removal(new_edited_image_path)
     filename = os.path.basename(new_removed_background_image_path)
     

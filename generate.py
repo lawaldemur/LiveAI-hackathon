@@ -219,6 +219,39 @@ def get_difference_between_images(image1, image2):
 
     print(f"{edit_object}")
     return edit_object
+
+
+
+def describe_image_style(image):
+    PROMPT = """Briefly describe main fashion style features of the image and its colors in 1-2 sentences"""
+    base64_image = encode_image(image)
+
+    messages = [
+        {
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": PROMPT,
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{base64_image}",
+                },
+            },
+        ],
+        }
+    ]
+    print("Single image style analysis...")
+
+    response = client.beta.chat.completions.parse(
+        model="gpt-4o",
+        messages=messages,
+    )
+    style_analysis = response.choices[0].message.content
+    print(f"{style_analysis}")
+    return style_analysis
     
 
 
@@ -287,3 +320,7 @@ def transfer_style(image1, image2):
         # Send the request
         response = requests.post(url, data=payload, files=files, headers=headers)
         print(response.text)
+
+
+def suggest_style_edits(style):
+    pass
