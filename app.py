@@ -3,7 +3,7 @@ from flask_cors import CORS
 from urllib.parse import quote, unquote
 import os
 from werkzeug.utils import secure_filename
-from generate import request_structure_edit, request_background_removal, describe_image_style
+from generate import request_structure_edit, request_background_removal, describe_image_style, suggest_style_edits
 
 
 app = Flask(__name__, static_folder='images')
@@ -68,6 +68,21 @@ def try_on():
     filename = os.path.basename(new_removed_background_image_path)
     
     return jsonify({"new_image_path": filename}), 200
+
+@app.route('/style_suggestions', methods=['POST'])
+def style_suggestions():
+    data = request.get_json()
+    style = data.get('style')
+
+    if not style:
+        return jsonify({"error": "Missing 'style'"}), 400
+
+    try:
+        suggestions = suggest_style_edits(style)
+        return jsonify({"suggestions": suggestions}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == '__main__':

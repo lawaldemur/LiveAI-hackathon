@@ -27,14 +27,45 @@ function App() {
         "Futurism",
         "Conceptual Art",
     ];
-    const personalityStyles = [
+    const [personalityStyles, setPersonalityStyles] = useState([
         "Adventerous",
         "Elegant",
         "Luxurious",
         "Modern",
         "Cozy",
         "Warm",
-    ];
+    ]);
+
+    useEffect(() => {
+        const updatePersonalityStyles = async (style) => {
+            try {
+                const response = await fetch(
+                    API_SOURCE_URL + "/style_suggestions",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ style: style.join(", ") }),
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const data = await response.json();
+                setPersonalityStyles(data.suggestions);
+                console.log("Style recommendations:", data.suggestions);
+            } catch (error) {
+                console.error("Error updating personality styles:", error);
+            }
+        };
+
+        if (storedStyles.length > 1) {
+            updatePersonalityStyles(storedStyles);
+        }
+    }, [storedStyles]);
 
     const pickCore = async (style) => {
         setCoreImage("styles.png");

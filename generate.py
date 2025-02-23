@@ -14,10 +14,6 @@ PICSART_API_KEY = os.getenv("PICSART_API_KEY")
 
 client = OpenAI()
 
-class ObjectEditing(BaseModel):
-    search_object: str
-    edit_prompt: str
-
 
 def send_generation_request(
     host,
@@ -322,5 +318,31 @@ def transfer_style(image1, image2):
         print(response.text)
 
 
+class StyleRecommendations(BaseModel):
+    recommendation1: str
+    recommendation2: str
+    recommendation3: str
+    recommendation4: str
+    recommendation5: str
+    recommendation6: str
+
+
 def suggest_style_edits(style):
-    pass
+    completion = client.beta.chat.completions.parse(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": "You're a fashion design expert. Provide sophisticated single-word options to continue this logical sequence of design progress."},
+            {"role": "user", "content": style}
+        ],
+        response_format=StyleRecommendations,
+    )
+
+    recommendations = [
+        completion.choices[0].message.parsed.recommendation1,
+        completion.choices[0].message.parsed.recommendation2,
+        completion.choices[0].message.parsed.recommendation3,
+        completion.choices[0].message.parsed.recommendation4,
+        completion.choices[0].message.parsed.recommendation5,
+        completion.choices[0].message.parsed.recommendation6,
+    ]
+    return recommendations
