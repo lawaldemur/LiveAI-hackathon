@@ -346,3 +346,40 @@ def suggest_style_edits(style):
         completion.choices[0].message.parsed.recommendation6,
     ]
     return recommendations
+
+
+if __name__ == "__main__":
+    import shutil
+
+    styles = [
+        "Surrealism",
+        "Minimalism",
+        "Postmodernism",
+        "Expressionism",
+        "Futurism",
+        "Conceptual Art",
+    ]
+
+    image_paths = []
+    file_path = "./images/styles.png"
+
+    for style in styles:
+        new_edited_image_path = request_structure_edit(file_path, style + " colored clothing")
+        new_removed_background_image_path = request_background_removal(new_edited_image_path)
+        image_paths.append(new_removed_background_image_path)\
+
+    # Rename images according to styles
+    for image_path, style in zip(image_paths, styles):
+        # Extract the directory and extension
+        directory, old_filename = os.path.split(image_path)
+        _, extension = os.path.splitext(old_filename)
+
+        # Create new filename
+        new_filename = f"core_{style.lower()}{extension}"
+
+        # Construct new file path
+        new_image_path = os.path.join(directory, new_filename)
+
+        # Rename the file
+        shutil.move(image_path, new_image_path)
+        print(f"Renamed {image_path} to {new_image_path}")
