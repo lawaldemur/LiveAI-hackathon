@@ -3,8 +3,8 @@ from flask_cors import CORS
 from urllib.parse import quote, unquote
 import os
 from werkzeug.utils import secure_filename
+from generate import request_structure_edit, request_background_removal
 
-from generate import request_structure_edit, request_background_removal, get_difference_between_images
 
 app = Flask(__name__, static_folder='images')
 CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000"])
@@ -52,14 +52,18 @@ def try_on():
     file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
     file.save(file_path)
     
-    style_image = request.form["style_image"]
+    # style_image = request.form["style_image"]
+    style = request.form["style"]
 
     # get text description of difference
-    difference = get_difference_between_images(file_path, "./images/" + style_image)
+    # difference = get_difference_between_images(file_path, "./images/" + style_image)
     
     # edit image according to the analysed difference
-    new_edited_image_path = request_structure_edit(file_path, difference)
-    filename = os.path.basename(new_edited_image_path)
+    # new_edited_image_path = request_structure_edit(file_path, difference)
+
+    new_edited_image_path = request_structure_edit(file_path, style)
+    new_removed_background_image_path = request_background_removal(new_edited_image_path)
+    filename = os.path.basename(new_removed_background_image_path)
     
     return jsonify({"new_image_path": filename}), 200
 

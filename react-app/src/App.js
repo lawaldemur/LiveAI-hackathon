@@ -106,6 +106,7 @@ function App() {
             const formData = new FormData();
             formData.append("upload_image", file);
             formData.append("style_image", image);
+            formData.append("style", storedStyles.join(", "));
 
             setLoading(true);
             try {
