@@ -10,6 +10,7 @@ os.makedirs("images", exist_ok=True)
 load_dotenv()
 STABILITY_KEY = os.getenv("STABILITY_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+PICSART_API_KEY = os.getenv("PICSART_API_KEY")
 
 client = OpenAI()
 
@@ -261,3 +262,28 @@ def get_changes_explanation(image1, image2):
 
     print(f"{result}")
     return result
+
+
+def transfer_style(image1, image2):
+    url = "https://api.picsart.io/tools/1.0/color-transfer"
+
+    # Use context managers to open files
+    with open(image1, "rb") as img1, open(image2, "rb") as img2:
+        files = {
+            "image": (os.path.basename(image1), img1, f"image/{os.path.splitext(image1)[1][1:]}"),
+            "reference_image": (os.path.basename(image2), img2, f"image/{os.path.splitext(image2)[1][1:]}")
+        }
+        
+        payload = {
+            "level": "l1",
+            "format": "JPG"
+        }
+        
+        headers = {
+            "accept": "application/json",
+            "X-Picsart-API-Key": PICSART_API_KEY
+        }
+
+        # Send the request
+        response = requests.post(url, data=payload, files=files, headers=headers)
+        print(response.text)
